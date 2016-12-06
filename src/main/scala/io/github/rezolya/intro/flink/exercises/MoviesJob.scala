@@ -58,9 +58,11 @@ object Rating {
     if (input.startsWith("      ")) {
       Try {
         val split = input.trim.split("\\s+").toList
-        val yearPosition = split.indexWhere(s => s.startsWith("("))
+        val episodePosition = split.indexWhere(s => s.startsWith("{"))
+        val yearPosition = if(episodePosition == -1) split.length-1 else episodePosition-1
         val year = split(yearPosition).replaceAll("[()/I]", "").toLong
         val title = split.slice(3, yearPosition).mkString(" ")
+        val episodeDesc = if(episodePosition == -1) "" else split.slice(episodePosition, split.length-1).mkString(" ")
         Rating(split(0), split(1).toLong, split(2).toDouble, title, year, "")
       }.toOption
     }
