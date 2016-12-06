@@ -1,6 +1,7 @@
 package io.github.rezolya.intro.flink.exercises
 
 import org.apache.flink.api.scala._
+import org.apache.flink.core.fs.FileSystem.WriteMode
 
 import scala.util.Try
 
@@ -19,18 +20,18 @@ object MoviesJob {
 
     //TODO: Exercise 1.1. Convert the text to objects of class Rating
     val validRatings: DataSet[Rating] = text.flatMap(t => Rating.parse(t))
-    validRatings.writeAsText("/tmp/movies/validRatings.txt")
+    validRatings.writeAsText("/tmp/movies/validRatings.txt", WriteMode.OVERWRITE)
 
     //TODO: Exercise 1.2. Find your favourite movie
     val favouriteMovie: DataSet[Rating] = validRatings.filter(r => r.title.startsWith("Bridget Jones"))
-    favouriteMovie.writeAsText("/tmp/favouriteMovieRating.txt")
+    favouriteMovie.writeAsText("/tmp/favouriteMovieRating.txt", WriteMode.OVERWRITE)
 
     //TODO: Exercise 1.3. Count words in the titles
     val wordCount: DataSet[(String, Int)] = validRatings.map(_.title.toLowerCase)
         .flatMap(t => t.split("\\W+"))
         .map(w => (w, 1))
         .sum(1)
-    wordCount.writeAsText("/tmp/movies/wordCount.txt")
+    wordCount.writeAsText("/tmp/movies/wordCount.txt", WriteMode.OVERWRITE)
 
     //TODO: Exercise 1.4. Split all ratings in 10 buckets by rank and count how many movies are in each one
     val buckets = (0 to 9).map(n => Bucket(n, n+1))
