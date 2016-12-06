@@ -24,7 +24,7 @@ object TaxisJob {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     // configure event-time processing
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
-    env.setParallelism(1)
+    //env.setParallelism(1)
 
     val maxDelay = 1
     val servingSpeed = 60
@@ -34,10 +34,10 @@ object TaxisJob {
       new TaxiRideSource("/tmp/nycTaxiRides.gz", maxDelay, servingSpeed))
 
     //TODO: Exercise 2.1. Write the taxi rides to a socket stream, and see how this works
-    val serialisationSchema = new SerializationSchema[String]() {
-      override def serialize(t: String): Array[Byte] = s"$t\n".getBytes
-    }
-    rides.map(_.toString).addSink(new SocketClientSink("localhost", 9999, serialisationSchema, 0, true))
+//    val serialisationSchema = new SerializationSchema[String]() {
+//      override def serialize(t: String): Array[Byte] = s"$t\n".getBytes
+//    }
+//    rides.map(_.toString).addSink(new SocketClientSink("localhost", 9999, serialisationSchema, 0, true))
 
     //TODO: Exercise 2.2. Taxi Ride Cleansing. Filter out only taxi rides which start and end in the New York City
     //GeoUtils.isInNYC() can tell you whether a location is in NYC.
