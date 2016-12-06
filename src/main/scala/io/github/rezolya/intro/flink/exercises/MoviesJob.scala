@@ -45,6 +45,10 @@ object MoviesJob {
 
     bucketCount.print()
 
+    //TODO: Exercise 1.5: Output the ranks that are not in defined buckets to a file
+    val weirdRank: DataSet[Rating] = withBuckets.filter(br => br._1 == Bucket(-10, -1)).map(br => br._2)
+    weirdRank.writeAsText("/tmp/movies/weirdRank.txt", WriteMode.OVERWRITE)
+
     env.execute()
   }
 }
