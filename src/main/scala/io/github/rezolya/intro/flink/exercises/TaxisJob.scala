@@ -41,7 +41,7 @@ object TaxisJob {
 
     //TODO: Exercise 2.2. Taxi Ride Cleansing. Filter out only taxi rides which start and end in the New York City
     //GeoUtils.isInNYC() can tell you whether a location is in NYC.
-    val nyRides = rides.filter(r => GeoUtils.isInNYC(r.startLon, r.startLat) && GeoUtils.isInNYC(r.endLon, r.endLat))
+    val nyRides: DataStream[TaxiRide] = rides.filter(r => GeoUtils.isInNYC(r.startLon, r.startLat) && GeoUtils.isInNYC(r.endLon, r.endLat))
     nyRides.writeAsText("/tmp/taxis/nyRides.txt", WriteMode.OVERWRITE)
 
     /* TODO: Exercise 3.3. Popular places. Find popular places by counting places where the taxi rides stop or start
